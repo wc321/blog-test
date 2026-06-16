@@ -1,0 +1,53 @@
+# Gradle
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# IntelliJ
+out/
+classes/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+*.env
+application-*.yml
+application-*.properties
+!application.yml
+
+# Log files
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.bak
+
+# Database
+*.db
+*.sqlite
+
+# Build artifacts
+*.jar
+*.war
+*.ear
+
+# Test reports
+test-results/
+jacoco/
+
+# Documentation
+site/
+
+# Misc
+*.class
+*.recommenders
