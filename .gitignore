@@ -58,3 +58,4 @@ target/
 .env
 application.yml
 logs/
+*.recommenders
