@@ -51,3 +51,10 @@ site/
 # Misc
 *.class
 *.recommenders
+
+#etc
+target/
+*.class
+.env
+application.yml
+logs/
