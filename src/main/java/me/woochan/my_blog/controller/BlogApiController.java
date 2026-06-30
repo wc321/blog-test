@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.woochan.my_blog.domain.Article;
 import me.woochan.my_blog.dto.AddArticleRequest;
 import me.woochan.my_blog.dto.ArticleResponse;
+import me.woochan.my_blog.dto.UpdateArticleRequest;
 import me.woochan.my_blog.service.BlogService;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
@@ -53,4 +54,12 @@ public class BlogApiController {
                 .build();
     }
 
+    @PutMapping("/api/articles/{id}")
+    public ResponseEntity<Article> updateArticle(@PathVariable long id,
+                                                 @RequestBody UpdateArticleRequest request) {
+        Article updatedArticle = blogService.update(id, request);
+
+        return ResponseEntity.ok()
+                .body(updatedArticle);
+    }
 }
