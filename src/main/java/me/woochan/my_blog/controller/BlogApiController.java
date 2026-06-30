@@ -5,6 +5,7 @@ import me.woochan.my_blog.domain.Article;
 import me.woochan.my_blog.dto.AddArticleRequest;
 import me.woochan.my_blog.dto.ArticleResponse;
 import me.woochan.my_blog.service.BlogService;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,14 @@ public class BlogApiController {
 
         return ResponseEntity.ok()
                 .body(new ArticleResponse(article));
+    }
+
+    @DeleteMapping("/api/articles/{id}")
+    public ResponseEntity<Void> deleteArticle(@PathVariable long id) {
+        blogService.delete(id);
+
+        return ResponseEntity.ok()
+                .build();
     }
 
 }
