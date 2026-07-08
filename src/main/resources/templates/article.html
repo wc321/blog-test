@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${article.title} + ' - wc blog'"></title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8f9fa;
+            line-height: 1.7;
+        }
+
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .post-container {
+            max-width: 860px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            padding: 3rem 2.5rem;
+        }
+
+        .post-title {
+            font-size: 2.4rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 1.2rem;
+            color: #1e3a8a;
+        }
+
+        .post-meta {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .post-content {
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .post-content p {
+            margin-bottom: 1.4rem;
+        }
+
+        .btn-action {
+            padding: 0.65rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 500;
+        }
+
+        .content-footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+        <a class="navbar-brand logo" href="/">wc blog</a>
+        <a href="/" class="btn btn-outline-secondary btn-sm">← 목록으로</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="post-container" th:if="${article != null}">
+
+        <h1 class="post-title" th:text="${article.title}"></h1>
+
+        <div class="post-meta">
+            <span>Posted on </span>
+            <span th:text="${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+            <span th:if="${article.updatedAt != article.updatedAt}" class="ms-3">
+                    (수정됨: <span th:text="${#temporals.format(article.updatedAt, 'yyyy-MM-dd HH:mm')}"></span>)
+                </span>
+        </div>
+
+        <div class="post-content" th:utext="${article.content}"></div>
+
+        <div class="content-footer d-flex justify-content-end gap-3">
+            <button class="btn btn-warning btn-action">
+                ✏️ 수정하기
+            </button>
+
+            <button class="btn btn-danger btn-action">
+                🗑️ 삭제하기
+            </button>
+        </div>
+    </div>
+
+    <div class="text-center py-5" th:if="${article == null}">
+        <h3 class="text-muted">존재하지 않는 게시글입니다.</h3>
+        <a href="/" class="btn btn-primary mt-3">홈으로 돌아가기</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
