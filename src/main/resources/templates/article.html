@@ -85,6 +85,7 @@
 <div class="container">
     <div class="post-container" th:if="${article != null}">
 
+        <input type="hidden" id="article-id" th:value="${article.id}">
         <h1 class="post-title" th:text="${article.title}"></h1>
 
         <div class="post-meta">
@@ -102,7 +103,7 @@
                 ✏️ 수정하기
             </button>
 
-            <button class="btn btn-danger btn-action">
+            <button id="delete-btn" class="btn btn-danger btn-action">
                 🗑️ 삭제하기
             </button>
         </div>
@@ -115,6 +116,8 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/article.js"></script>
+
 
 </body>
 </html>
