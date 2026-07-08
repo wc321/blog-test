@@ -99,7 +99,8 @@
         <div class="post-content" th:utext="${article.content}"></div>
 
         <div class="content-footer d-flex justify-content-end gap-3">
-            <button class="btn btn-warning btn-action">
+            <button id="modify-btn"
+                    th:onclick="|location.href='@{/new-article?id={articleId}(articleId=${article.id})}'|" class="btn btn-warning btn-action">
                 ✏️ 수정하기
             </button>
 

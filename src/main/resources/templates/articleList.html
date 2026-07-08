@@ -130,6 +130,9 @@
         <h1>최신 글</h1>
         <p class="lead text-muted">wc blog에 오신 것을 환영합니다</p>
     </div>
+    <button id="create-btn" th:onclick="|location.href='@{/new-article}'|"
+            class="btn btn-secondary btn-xg mb-3">글 등록
+    </button>
 
     <div class="row row-cols-1 row-cols-md-2 g-4" th:if="${articles != null and not articles.isEmpty()}">
 
