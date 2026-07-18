@@ -2,10 +2,9 @@ package me.woochan.my_blog.controller;
 
 import lombok.RequiredArgsConstructor;
 import me.woochan.my_blog.domain.Article;
-import me.woochan.my_blog.dto.AddArticleRequest;
-import me.woochan.my_blog.dto.ArticleResponse;
-import me.woochan.my_blog.dto.UpdateArticleRequest;
+import me.woochan.my_blog.dto.*;
 import me.woochan.my_blog.service.BlogService;
+import me.woochan.my_blog.service.WritingAssistantService;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +17,7 @@ import java.util.List;
 public class BlogApiController {
 
     private final BlogService blogService;
+    private final WritingAssistantService writingAssistantService;
 
     @PostMapping("/api/articles")
     public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request) {
@@ -61,5 +61,13 @@ public class BlogApiController {
 
         return ResponseEntity.ok()
                 .body(updatedArticle);
+    }
+
+    @PostMapping("/api/ai-suggestions")
+    public ResponseEntity<WritingSuggestionResponse> writingAssist(@RequestBody WritingSuggestionRequest request) {
+        WritingSuggestionResponse response = writingAssistantService.getWritingAssist(request);
+
+        return ResponseEntity.ok()
+                .body(response);
     }
 }
