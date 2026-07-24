@@ -22,6 +22,13 @@ const modifyButton = document.getElementById('modify-btn');
 
 if (modifyButton) {
     modifyButton.addEventListener('click', ev => {
+        const title = document.getElementById("title").value;
+        const content = document.getElementById("content").value;
+        if (title.length > 200) {
+            alert("제목은 200자까지 입력 가능합니다.");
+            return;
+        }
+
         let params = new URLSearchParams(location.search);
         let id = params.get('id');
 
@@ -31,8 +38,8 @@ if (modifyButton) {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                title: document.getElementById('title').value,
-                content: document.getElementById('content').value
+                title,
+                content
             })
         })
             .then(()=>{
@@ -44,17 +51,22 @@ if (modifyButton) {
 
 //등록 기능
 const createButton = document.getElementById("create-btn");
-
 if (createButton) {
     createButton.addEventListener('click',ev => {
+        const title = document.getElementById("title").value;
+        const content = document.getElementById("content").value;
+        if (title.length > 200) {
+            alert("제목은 200자까지 입력 가능합니다.");
+            return;
+        }
         fetch("/api/articles", {
             method: "POST",
             headers:{
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                title: document.getElementById("title").value,
-                content: document.getElementById("content").value,
+                title,
+                content
             }),
         }).then(()=>{
             alert("등록 완료되었습니다.");

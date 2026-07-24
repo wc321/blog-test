@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: my-blog
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+  h2:
+    console:
+      enabled:true
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}

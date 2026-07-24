@@ -56,5 +56,4 @@ site/
 target/
 *.class
 .env
-application.yml
 logs/
