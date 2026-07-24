@@ -21,6 +21,9 @@ public class BlogApiController {
 
     @PostMapping("/api/articles")
     public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request) {
+        if (request.getTitle() != null && request.getTitle().length() > 200) {
+            throw new IllegalArgumentException("제목은 200자까지 입력 가능합니다.");
+        }
         Article savedArticle = blogService.save(request);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -57,6 +60,9 @@ public class BlogApiController {
     @PutMapping("/api/articles/{id}")
     public ResponseEntity<Article> updateArticle(@PathVariable long id,
                                                  @RequestBody UpdateArticleRequest request) {
+        if (request.getTitle() != null && request.getTitle().length() > 200) {
+            throw new IllegalArgumentException("제목은 200자까지 입력 가능합니다.");
+        }
         Article updatedArticle = blogService.update(id, request);
 
         return ResponseEntity.ok()
