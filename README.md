@@ -29,3 +29,4 @@ Spring Boot + Gradle 기반의 블로그 웹 애플리케이션입니다.
 
 ### 1. 저장소 클론
 ```bash
+git clone git@github.com:wc321/blog-test.git

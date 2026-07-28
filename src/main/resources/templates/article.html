@@ -72,6 +72,14 @@
             padding-top: 2rem;
             border-top: 1px solid #eee;
         }
+        .post-image {
+            width: 100%;
+            max-height: 480px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
     </style>
 </head>
 <body>
@@ -96,6 +104,14 @@
                     (수정됨: <span th:text="${#temporals.format(article.updatedAt, 'yyyy-MM-dd HH:mm')}"></span>)
                 </span>
         </div>
+
+        <div th:if="${article.imageUrl != null and !#strings.isEmpty(article.imageUrl)}">
+            <img th:src="${article.imageUrl}"
+                 class="post-image"
+                 alt="대표 이미지"
+                 loading="lazy">
+        </div>
+
 
         <div class="post-content" th:utext="${article.content}"></div>
 
