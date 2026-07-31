@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.woochan.my_blog.domain.Article;
 import me.woochan.my_blog.dto.*;
 import me.woochan.my_blog.service.BlogService;
+import me.woochan.my_blog.service.ThumbnailGeneratorService;
 import me.woochan.my_blog.service.WritingAssistantService;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ public class BlogApiController {
 
     private final BlogService blogService;
     private final WritingAssistantService writingAssistantService;
+    private final ThumbnailGeneratorService thumbnailGeneratorService;
 
     @PostMapping("/api/articles")
     public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request) {
@@ -72,6 +74,14 @@ public class BlogApiController {
     @PostMapping("/api/ai-suggestions")
     public ResponseEntity<WritingSuggestionResponse> writingAssist(@RequestBody WritingSuggestionRequest request) {
         WritingSuggestionResponse response = writingAssistantService.getWritingAssist(request);
+
+        return ResponseEntity.ok()
+                .body(response);
+    }
+
+    @PostMapping("/api/ai-thumbnails")
+    public ResponseEntity<GeneratorThumbnailResponse> thumbnailGenerator(@RequestBody GeneratorThumbnailRequest request) {
+        GeneratorThumbnailResponse response = thumbnailGeneratorService.generateThumbnail(request);
 
         return ResponseEntity.ok()
                 .body(response);
