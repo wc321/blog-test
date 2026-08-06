@@ -59,6 +59,20 @@ if (modifyButton) {
                 }
                 const uploadData = await res.json();
                 imageUrl = uploadData.imageUrl;
+            }else if (window.aiGeneratedBase64) {
+                const aiFile = await compressAndConvertToFile(window.aiGeneratedBase64);
+                const formData = new FormData();
+                formData.append("file", aiFile);
+
+                const uploadRes = await fetch("/api/upload", {
+                    method: "POST",
+                    body: formData
+                });
+                if (!uploadRes.ok) {
+                    throw new Error("이미지 업로드에 실패했습니다.");
+                }
+                const uploadData = await uploadRes.json();
+                imageUrl = uploadData.imageUrl;
             }
 
             const saveRes = await fetch(`/api/articles/${id}`, {
@@ -118,6 +132,20 @@ if (createButton) {
                 }
                 const uploadData = await uploadRes.json();
                 imageUrl = uploadData.imageUrl;
+            }else if (window.aiGeneratedBase64) {
+                const aiFile = await compressAndConvertToFile(window.aiGeneratedBase64);
+                const formData = new FormData();
+                formData.append("file", aiFile);
+
+                const uploadRes = await fetch("/api/upload", {
+                    method: "POST",
+                    body: formData
+                });
+                if (!uploadRes.ok) {
+                    throw new Error("이미지 업로드에 실패했습니다.");
+                }
+                const uploadData = await uploadRes.json();
+                imageUrl = uploadData.imageUrl;
             }
             const saveRes = await fetch("/api/articles", {
                 method: "POST",
@@ -142,6 +170,64 @@ if (createButton) {
             createButton.disabled = false;
             createButton.textContent = "등록";
         }
+    });
+}
+
+async function compressAndConvertToFile(base64, filename = 'thumbnail.jpg', maxSizeKB = 960) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = `data:image/png;base64,${base64}`;
+
+        img.onload = () => {
+            const widthSteps = [1280, 1024, 800, 640];
+            let dataUrl = null;
+
+            const getSizeKB = (url) => (url.length * 0.75) / 1024;
+
+            const tryCompress = (maxWidth) => {
+                let width = img.width;
+                let height = img.height;
+
+                if (width > maxWidth) {
+                    height = Math.round((height * maxWidth) / width);
+                    width = maxWidth;
+                }
+
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+
+                let quality = 0.95;
+                let currentDataUrl = canvas.toDataURL('image/jpeg', quality);
+
+                while (getSizeKB(currentDataUrl) > maxSizeKB && quality > 0.2) {
+                    quality -= 0.05;
+                    currentDataUrl = canvas.toDataURL('image/jpeg', quality);
+                }
+
+                return currentDataUrl;
+            };
+
+            for (const maxWidth of widthSteps) {
+                dataUrl = tryCompress(maxWidth);
+
+                if (getSizeKB(dataUrl) <= maxSizeKB) {
+                    break;
+                }
+            }
+
+            fetch(dataUrl)
+                .then(res => res.blob())
+                .then(blob => {
+                    const file = new File([blob], filename, { type: 'image/jpeg' });
+                    resolve(file);
+                })
+                .catch(reject);
+        };
+
+        img.onerror = () => reject(new Error('이미지 로드에 실패했습니다.'));
     });
 }
 

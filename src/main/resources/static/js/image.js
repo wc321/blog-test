@@ -4,6 +4,8 @@ const previewArea = document.getElementById('previewArea');
 const previewImg = document.getElementById('previewImg');
 const uploadPrompt = document.getElementById('uploadPrompt');
 const removeImgBtn = document.getElementById('removeImgBtn');
+const aiThumbnailBtn = document.getElementById("ai-thumbnail-btn");
+const aiThumbnailLoading = document.getElementById('aiThumbnailLoading');
 
 imageInput.addEventListener('change', function () {
     const file = this.files[0];
@@ -42,3 +44,56 @@ removeImgBtn.addEventListener('click', function () {
     uploadPrompt.classList.remove('d-none');
     imageRemoved.value = "true";
 });
+
+aiThumbnailBtn.addEventListener('click', async ()=>{
+    const title = document.getElementById('title').value;
+    const content = document.getElementById('content').value;
+
+    if (!title.trim() && !content.trim()) {
+        alert('제목이나 내용을 먼저 입력해주세요.');
+        return;
+    }
+    uploadPrompt.classList.add('d-none');
+    previewArea.classList.add('d-none');
+    aiThumbnailLoading.style.display = 'block';
+    aiThumbnailBtn.disabled = true;
+
+    const progressBar = document.getElementById('aiProgressBar');
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += 100 / 40;          // 40초에 100%
+        if (progress >= 100) progress = 100;
+        progressBar.style.width = progress + '%';
+    }, 1000);
+
+    try {
+        const res = await fetch('/api/ai-thumbnails', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                title,
+                content
+            })
+        });
+        if (!res.ok) throw new Error('썸네일 생성 실패');
+
+        const data = await res.json();
+
+        previewImg.src = `data:image/png;base64,${data.base64Image}`;
+        imageRemoved.value = "false";
+        window.aiGeneratedBase64 = data.base64Image;
+        imageInput.value = '';
+
+    } catch (error){
+        console.error(error);
+        alert("썸네일 생성 중 오류가 발생했습니다.");
+    } finally {
+        clearInterval(interval);
+        progressBar.style.width = '0%';
+        aiThumbnailLoading.style.display = 'none';
+        aiThumbnailBtn.disabled = false;
+        previewArea.classList.remove('d-none');
+        uploadPrompt.classList.add('d-none');
+    }
+})
+

@@ -53,7 +53,7 @@ function showSuggestions(suggestions) {
         div.innerHTML = `
                     <p>${suggestion}</p>
                     <button class="btn btn-sm btn-outline-primary add-btn" 
-                            onclick="addToContent('${suggestion.replace(/"/g, '&quot;')}')">
+                            onclick="addToContent(${JSON.stringify(suggestion)})">
                         클릭하여 추가
                     </button>
                 `;
