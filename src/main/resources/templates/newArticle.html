@@ -77,6 +77,9 @@
         .btn-remove-img:hover {
             background: #dc3545;
         }
+        #aiThumbnailLoading {
+            min-height: 160px;
+        }
     </style>
 </head>
 <body>
@@ -107,12 +110,13 @@
             <label class="form-label">대표 이미지 (선택)</label>
             <div class="image-upload-box" id="uploadBox">
                 <div id="uploadPrompt" th:classappend="${article.id != null and article.imageUrl != null and !#strings.isEmpty(article.imageUrl)} ? 'd-none' : ''">
-                    <p class="mb-2 text-muted">이미지를 선택하세요</p>
+                    <p class="mb-2 text-muted">이미지를 선택하거나 AI로 썸네일을 생성하세요</p>
                     <label for="imageInput" class="btn btn-outline-primary">
                         이미지 선택
                     </label>
                     <input type="file" id="imageInput" name="image"
                            accept="image/*" class="d-none">
+
                 </div>
                 <div id="previewArea" th:classappend="${article.id == null or article.imageUrl == null or #strings.isEmpty(article.imageUrl)} ? 'd-none' : ''">
                     <div class="preview-wrapper">
@@ -122,6 +126,16 @@
                         <button type="button" class="btn-remove-img" id="removeImgBtn" title="이미지 제거">
                             ×
                         </button>
+                    </div>
+                </div>
+                <div id="aiThumbnailLoading" class="text-center py-4" style="display: none;">
+                    <div class="spinner-border text-success mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
+                    <p class="mb-1 fw-medium">AI가 썸네일을 생성하고 있습니다...</p>
+                    <p class="text-muted small">약 40초 정도 소요됩니다. 잠시만 기다려 주세요.</p>
+
+                    <div class="progress mt-3 mx-auto" style="max-width: 280px; height: 6px;">
+                        <div id="aiProgressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                             role="progressbar" style="width: 0%"></div>
                     </div>
                 </div>
             </div>

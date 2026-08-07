@@ -10,3 +10,6 @@ spring:
   ai:
     openai:
       api-key: ${OPENAI_API_KEY}
+      image:
+        options:
+          model: gpt-image-1-mini
