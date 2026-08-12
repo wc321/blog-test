@@ -6,7 +6,7 @@ spring:
     username: sa
   h2:
     console:
-      enabled:true
+      enabled: true
   ai:
     openai:
       api-key: ${OPENAI_API_KEY}
