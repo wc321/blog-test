@@ -53,7 +53,7 @@ function showSuggestions(suggestions) {
         div.innerHTML = `
                     <p>${suggestion}</p>
                     <button class="btn btn-sm btn-outline-primary add-btn" 
-                            onclick="addToContent(${JSON.stringify(suggestion)})">
+                            onclick="addToContent('${escapeHtml(suggestion)}')">
                         클릭하여 추가
                     </button>
                 `;
@@ -68,6 +68,14 @@ function addToContent(text) {
     contentArea.value += (contentArea.value ? '\n\n' : '') + text;
 
     alert("본문에 내용이 추가되었습니다!");
+}
+function escapeHtml(text) {
+    return text
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
 }
 
 document.getElementById('aiAssistModal').addEventListener('hidden.bs.modal', () => {

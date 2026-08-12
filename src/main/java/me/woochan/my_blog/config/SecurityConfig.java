@@ -22,7 +22,8 @@ public class SecurityConfig {
     public WebSecurityCustomizer configure() {
         return (web -> web.ignoring()
                 .requestMatchers(toH2Console())
-                .requestMatchers("/static/**"));
+                .requestMatchers("/static/**")
+                .requestMatchers("/.well-known/**"));
     }
 
     @Bean
@@ -37,11 +38,16 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
-                        .defaultSuccessUrl("/articles"))
+                        .defaultSuccessUrl("/articles", true))
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true))
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers(
+                                "/api/**",
+                                "/h2-console/**"
+                        ))
+//                .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }
 
