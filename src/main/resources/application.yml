@@ -13,3 +13,6 @@ spring:
       image:
         options:
           model: gpt-image-1-mini
+jwt:
+  issuer: wc-blog-app
+  secret_key: ${JWT_SECRET_KEY}
