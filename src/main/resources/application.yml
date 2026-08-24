@@ -13,6 +13,16 @@ spring:
       image:
         options:
           model: gpt-image-1-mini
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${CLIENT-ID}
+            client-secret: ${CLIENT-SECRET}
+            scope:
+              - email
+              - profile
 jwt:
   issuer: wc-blog-app
   secret_key: ${JWT_SECRET_KEY}
