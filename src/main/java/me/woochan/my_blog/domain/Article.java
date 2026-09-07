@@ -29,6 +29,9 @@ public class Article {
     @Column(name = "content", columnDefinition = "TEXT",nullable = false)
     private String content;
 
+    @Column(name = "author", nullable = false)
+    private String author;
+
     @Column(name = "image_url")
     private String imageUrl;
 
@@ -41,7 +44,8 @@ public class Article {
     private LocalDateTime updatedAt;
 
     @Builder
-    public Article(String title, String content, String imageUrl) {
+    public Article(String author, String title, String content, String imageUrl) {
+        this.author = author;
         this.title = title;
         this.content = content;
         this.imageUrl = imageUrl;

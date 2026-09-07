@@ -100,9 +100,10 @@
         <div class="post-meta">
             <span>Posted on </span>
             <span th:text="${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
-            <span th:if="${article.updatedAt != article.updatedAt}" class="ms-3">
+            <span th:if="${article.createdAt != article.updatedAt}" class="ms-3">
                     (수정됨: <span th:text="${#temporals.format(article.updatedAt, 'yyyy-MM-dd HH:mm')}"></span>)
                 </span>
+            <span th:text=" By ${article.author}"></span>
         </div>
 
         <div th:if="${article.imageUrl != null and !#strings.isEmpty(article.imageUrl)}">
