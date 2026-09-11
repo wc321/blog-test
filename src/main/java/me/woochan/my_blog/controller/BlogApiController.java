@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -22,11 +23,11 @@ public class BlogApiController {
     private final ThumbnailGeneratorService thumbnailGeneratorService;
 
     @PostMapping("/api/articles")
-    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request) {
+    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request, Principal principal) {
         if (request.getTitle() != null && request.getTitle().length() > 200) {
             throw new IllegalArgumentException("제목은 200자까지 입력 가능합니다.");
         }
-        Article savedArticle = blogService.save(request);
+        Article savedArticle = blogService.save(request, principal.getName());
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(savedArticle);

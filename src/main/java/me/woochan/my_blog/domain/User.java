@@ -24,6 +24,9 @@ public class User implements UserDetails {
     @Column(name = "id", updatable = false)
     private Long id;
 
+    @Column(name = "nickname", unique = true)
+    private String nickname;
+
     @Column(name = "email",nullable = false, unique = true)
     private String email;
 
@@ -31,9 +34,10 @@ public class User implements UserDetails {
     private String password;
 
     @Builder
-    public User(String email, String password, String auth) {
+    public User(String email, String password, String nickname) {
         this.email = email;
         this.password = password;
+        this.nickname = nickname;
     }
 
     @Override
@@ -69,5 +73,10 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
+    }
+
+    public User update(String nickname) {
+        this.nickname = nickname;
+        return this;
     }
 }

@@ -67,14 +67,11 @@ aiThumbnailBtn.addEventListener('click', async ()=>{
     }, 1000);
 
     try {
-        const res = await fetch('/api/ai-thumbnails', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                title,
-                content
-            })
+        const res = await httpRequest(`/api/ai-thumbnails`, {
+            method: "POST",
+            body: JSON.stringify({ title, content}),
         });
+
         if (!res.ok) throw new Error('썸네일 생성 실패');
 
         const data = await res.json();
@@ -96,4 +93,3 @@ aiThumbnailBtn.addEventListener('click', async ()=>{
         uploadPrompt.classList.add('d-none');
     }
 })
-

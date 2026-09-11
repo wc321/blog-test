@@ -19,14 +19,9 @@ getBtn.addEventListener('click', async () => {
     getBtn.disabled = true;
 
     try {
-        const response = await fetch('/api/ai-suggestions', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                title: title,
-                content: content,
-                question: question
-            })
+        const response = await httpRequest("/api/ai-suggestions", {
+            method: "POST",
+            body: JSON.stringify({ title, content, question }),
         });
         const data = await response.json();
 
