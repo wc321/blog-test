@@ -86,7 +86,7 @@
 
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-        <a class="navbar-brand logo" href="/">wc blog</a>
+        <a class="navbar-brand logo" href="/articles">wc blog</a>
         <a href="/articles" class="btn btn-outline-secondary btn-sm">← 목록으로</a>
     </div>
 </nav>
@@ -103,7 +103,7 @@
             <span th:if="${article.createdAt != article.updatedAt}" class="ms-3">
                     (수정됨: <span th:text="${#temporals.format(article.updatedAt, 'yyyy-MM-dd HH:mm')}"></span>)
                 </span>
-            <span th:text=" By ${article.author}"></span>
+            <span th:text="|By ${article.author}|"></span>
         </div>
 
         <div th:if="${article.imageUrl != null and !#strings.isEmpty(article.imageUrl)}">
@@ -135,6 +135,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/token.js"></script>
 <script src="/js/article.js"></script>
 
 

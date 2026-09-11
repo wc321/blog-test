@@ -27,12 +27,13 @@ public class OAuth2AuthorizationRequestBasedOnCookieRepository implements
 
     @Override
     public @Nullable OAuth2AuthorizationRequest removeAuthorizationRequest(HttpServletRequest request, HttpServletResponse response) {
-        OAuth2AuthorizationRequest authorizationRequest =
-                this.loadAuthorizationRequest(request);
-
+        OAuth2AuthorizationRequest requestCookie = null;
+        try {
+            requestCookie = this.loadAuthorizationRequest(request);
+        } catch (Exception ignored) {
+        }
         this.removeAuthorizationRequestCookies(request, response);
-
-        return authorizationRequest;
+        return requestCookie;
     }
 
     @Override
@@ -45,7 +46,7 @@ public class OAuth2AuthorizationRequestBasedOnCookieRepository implements
                 CookieUtil.serialize(authorizationRequest), COOKIE_EXPIRE_SECONDS);
     }
 
-    private void removeAuthorizationRequestCookies(HttpServletRequest request, HttpServletResponse response) {
+    public void removeAuthorizationRequestCookies(HttpServletRequest request, HttpServletResponse response) {
         CookieUtil.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
     }
 }

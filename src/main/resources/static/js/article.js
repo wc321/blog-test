@@ -2,18 +2,18 @@
 const deleteButton = document.getElementById('delete-btn');
 
 if (deleteButton) {
-    deleteButton.addEventListener('click', ev => {
-        if (confirm("정말로 이 글을 삭제 하시겠습니까?")) {
-            let id = document.getElementById('article-id').value;
-            fetch(`/api/articles/${id}`, {
-                method: 'DELETE'
-            })
-                .then(() => {
-                    alert('삭제가 완료되었습니다.');
-                    location.replace('/articles');
-                });
-        }
+    deleteButton.addEventListener("click", async () => {
+        if (!confirm("정말로 이 글을 삭제 하시겠습니까?")) return;
 
+        const id = document.getElementById("article-id").value;
+        try {
+            await httpRequest(`/api/articles/${id}`, { method: "DELETE" });
+            alert("삭제가 완료되었습니다.");
+            location.replace("/articles");
+        } catch (e) {
+            console.error(e);
+            alert("삭제에 실패했습니다.");
+        }
     });
 }
 
@@ -49,9 +49,10 @@ if (modifyButton) {
                 const formData = new FormData();
                 formData.append("file", file);
 
-                const res = await fetch("/api/upload", {
+                const res = await httpRequest("/api/upload", {
                     method: "POST",
-                    body: formData
+                    body: formData,
+                    isFile: true,
                 });
 
                 if (!res.ok) {
@@ -64,9 +65,10 @@ if (modifyButton) {
                 const formData = new FormData();
                 formData.append("file", aiFile);
 
-                const uploadRes = await fetch("/api/upload", {
+                const uploadRes = await httpRequest("/api/upload", {
                     method: "POST",
-                    body: formData
+                    body: formData,
+                    isFile: true,
                 });
                 if (!uploadRes.ok) {
                     throw new Error("이미지 업로드에 실패했습니다.");
@@ -75,17 +77,11 @@ if (modifyButton) {
                 imageUrl = uploadData.imageUrl;
             }
 
-            const saveRes = await fetch(`/api/articles/${id}`, {
+            const saveRes = await httpRequest(`/api/articles/${id}`, {
                 method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    title,
-                    content,
-                    imageUrl
-                })
+                body: JSON.stringify({ title, content, imageUrl }),
             });
+
             if (!saveRes.ok) {
                 throw new Error("글 수정에 실패했습니다.")
             }
@@ -123,9 +119,10 @@ if (createButton) {
                 const formData = new FormData();
                 formData.append("file", file);
 
-                const uploadRes = await fetch("/api/upload", {
+                const uploadRes = await httpRequest("/api/upload", {
                     method: "POST",
-                    body: formData
+                    body: formData,
+                    isFile: true,
                 });
                 if (!uploadRes.ok) {
                     throw new Error("이미지 업로드에 실패했습니다.");
@@ -137,9 +134,10 @@ if (createButton) {
                 const formData = new FormData();
                 formData.append("file", aiFile);
 
-                const uploadRes = await fetch("/api/upload", {
+                const uploadRes = await httpRequest("/api/upload", {
                     method: "POST",
-                    body: formData
+                    body: formData,
+                    isFile: true,
                 });
                 if (!uploadRes.ok) {
                     throw new Error("이미지 업로드에 실패했습니다.");
@@ -147,16 +145,9 @@ if (createButton) {
                 const uploadData = await uploadRes.json();
                 imageUrl = uploadData.imageUrl;
             }
-            const saveRes = await fetch("/api/articles", {
+            const saveRes = await httpRequest("/api/articles", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    title,
-                    content,
-                    imageUrl
-                })
+                body: JSON.stringify({ title, content, imageUrl }),
             });
             if (!saveRes.ok) {
                 throw new Error("글 등록에 실패했습니다.")
