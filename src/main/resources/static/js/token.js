@@ -124,8 +124,52 @@ async function httpRequest(url, options = {}, isRetry = false) {
     throw new Error(`요청 실패 (${res.status})`);
 }
 
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initAuthButtons);
-} else {
+function parseJwtPayload(token) {
+    try {
+        const payload = token.split(".")[1];
+        const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
+        const json = decodeURIComponent(
+            atob(base64)
+                .split("")
+                .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+                .join("")
+        );
+        return JSON.parse(json);
+    } catch (e) {
+        return null;
+    }
+}
+
+function getCurrentUserEmail() {
+    const token = getAccessToken();
+    if (!token) return null;
+    const payload = parseJwtPayload(token);
+
+    return payload?.sub ?? null;
+}
+
+function initOwnerActions() {
+    const actions = document.getElementById("owner-actions");
+    const authorEl = document.getElementById("article-author");
+
+    if (!actions || !authorEl) return;
+
+    const currentEmail = getCurrentUserEmail();
+    const author = authorEl.value;
+
+    if (currentEmail && author && currentEmail === author) {
+        actions.classList.remove("d-none");
+        actions.classList.add("d-flex");
+    }
+}
+
+function initPageAuth() {
     initAuthButtons();
+    initOwnerActions();
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initPageAuth);
+} else {
+    initPageAuth();
 }

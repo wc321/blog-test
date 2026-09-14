@@ -16,6 +16,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -26,6 +29,7 @@ import static org.springframework.boot.security.autoconfigure.web.servlet.PathRe
 @Configuration
 public class WebOAuthSecurityConfig {
 
+    private final ClientRegistrationRepository clientRegistrationRepository;
     private final OAuth2UserCustomService oAuth2UserCustomService;
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -61,7 +65,8 @@ public class WebOAuthSecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
                         .authorizationEndpoint(authorizationEndpointConfig ->
-                                authorizationEndpointConfig.authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository()))
+                                authorizationEndpointConfig.authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository())
+                                        .authorizationRequestResolver(authorizationRequestResolver()))
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(oAuth2UserCustomService))
                         .successHandler(oAuth2SuccessHandler())
                 )
@@ -86,5 +91,20 @@ public class WebOAuthSecurityConfig {
     @Bean
     public OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository() {
         return new OAuth2AuthorizationRequestBasedOnCookieRepository();
+    }
+
+    @Bean
+    public OAuth2AuthorizationRequestResolver authorizationRequestResolver() {
+        DefaultOAuth2AuthorizationRequestResolver resolver =
+                new DefaultOAuth2AuthorizationRequestResolver(
+                        clientRegistrationRepository,
+                        "/oauth2/authorization"
+                );
+        resolver.setAuthorizationRequestCustomizer(customizer ->
+                customizer.additionalParameters(params ->
+                        params.put("prompt", "select_account")
+                )
+        );
+        return resolver;
     }
 }
