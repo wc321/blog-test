@@ -94,7 +94,6 @@
 <div class="container">
     <div class="post-container" th:if="${article != null}">
 
-        <input type="hidden" id="article-id" th:value="${article.id}">
         <h1 class="post-title" th:text="${article.title}"></h1>
 
         <div class="post-meta">
@@ -116,7 +115,10 @@
 
         <div class="post-content" th:utext="${article.content}"></div>
 
-        <div class="content-footer d-flex justify-content-end gap-3">
+        <input type="hidden" id="article-id" th:value="${article.id}">
+        <input type="hidden" id="article-author" th:value="${article.author}">
+
+        <div id="owner-actions" class="content-footer d-none justify-content-end gap-3">
             <button id="modify-btn"
                     th:onclick="|location.href='@{/new-article?id={articleId}(articleId=${article.id})}'|" class="btn btn-warning btn-action">
                 ✏️ 수정하기
