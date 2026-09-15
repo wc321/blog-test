@@ -101,6 +101,28 @@
             font-weight: 700;
             color: #1e3a8a;
         }
+        .profile-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #e5e7eb;
+            cursor: pointer;
+        }
+        .profile-avatar:hover {
+            border-color: #2563eb;
+        }
+        .navbar .dropdown-toggle::after {
+            display: none;
+        }
+        .nav-login {
+            color: #2563eb !important;
+            font-weight: 500;
+        }
+
+        .nav-login:hover {
+            color: #1e40af !important;
+        }
     </style>
 </head>
 <body>
@@ -126,6 +148,30 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">About</a>
                 </li>
+                <li class="nav-item ms-2" id="nav-login-item" style="display: none;">
+                    <a id="login-btn" href="/login" class="nav-link nav-login">로그인</a>
+                </li>
+
+                <li class="nav-item dropdown ms-2" id="nav-profile-item" style="display: none;">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center p-0"
+                       href="#"
+                       id="profileDropdown"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        <img id="profile-img"
+                             class="profile-avatar"
+                             alt="프로필"
+                             src="">
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                        <li>
+                            <button type="button" id="logout-btn" class="dropdown-item">
+                                로그아웃
+                            </button>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>
@@ -142,14 +188,14 @@
                 class="btn btn-primary">
             글 등록
         </button>
-        <div>
-            <a id="login-btn" href="/login" class="btn btn-primary" style="display: none;">
-                로그인
-            </a>
-            <button type="button" id="logout-btn" class="btn btn-outline-secondary" style="display: none;">
-                로그아웃
-            </button>
-        </div>
+<!--        <div>-->
+<!--            <a id="login-btn" href="/login" class="btn btn-primary" style="display: none;">-->
+<!--                로그인-->
+<!--            </a>-->
+<!--            <button type="button" id="logout-btn" class="btn btn-outline-secondary" style="display: none;">-->
+<!--                로그아웃-->
+<!--            </button>-->
+<!--        </div>-->
     </div>
 
     <div class="row row-cols-1 row-cols-md-2 g-4" th:if="${articles != null and not articles.isEmpty()}">
