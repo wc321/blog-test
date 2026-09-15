@@ -1,5 +1,6 @@
 const ACCESS_TOKEN_KEY = "access_token";
 const REFRESH_COOKIE_NAME = "refresh_token";
+const PROFILE_IMAGE_KEY = "profile_image";
 
 
 function isLoggedIn() {
@@ -8,20 +9,31 @@ function isLoggedIn() {
 
 function logout() {
     localStorage.removeItem("access_token");
+    localStorage.removeItem("profile_image");
     deleteCookie("refresh_token");
     location.replace("/login");
 }
 
 function initAuthButtons() {
-    const loginBtn = document.getElementById("login-btn");
+    const loginItem = document.getElementById("nav-login-item");
+    const profileItem = document.getElementById("nav-profile-item");
+    const profileImg = document.getElementById("profile-img");
     const logoutBtn = document.getElementById("logout-btn");
+    const createBtn = document.getElementById("create-btn");
 
     if (isLoggedIn()) {
-        if (loginBtn) loginBtn.style.display = "none";
-        if (logoutBtn) logoutBtn.style.display = "inline-block";
+        if (loginItem) loginItem.style.display = "none";
+        if (profileItem) profileItem.style.display = "block";
+        if (createBtn) createBtn.style.display = "inline-block";
+
+        const picture = localStorage.getItem("profile_image");
+        if (profileImg) {
+            profileImg.src = picture || "https://ui-avatars.com/api/?name=U&background=2563eb&color=fff";
+        }
     } else {
-        if (loginBtn) loginBtn.style.display = "inline-block";
-        if (logoutBtn) logoutBtn.style.display = "none";
+        if (loginItem) loginItem.style.display = "block";
+        if (profileItem) profileItem.style.display = "none";
+        if (createBtn) createBtn.style.display = "none";
     }
 
     if (logoutBtn) {
@@ -60,7 +72,15 @@ function getRefreshToken() {
     if (!token) return;
 
     setAccessToken(token);
+
+    const picture = params.get("picture");
+    if (picture) {
+        localStorage.setItem(PROFILE_IMAGE_KEY, picture);
+    }
+
     params.delete("token");
+    params.delete("picture");
+
     const qs = params.toString();
     const clean = location.pathname + (qs ? "?" + qs : "") + location.hash;
     history.replaceState({}, "", clean);

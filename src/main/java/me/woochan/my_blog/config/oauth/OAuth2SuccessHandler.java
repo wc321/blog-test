@@ -48,7 +48,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         addRefreshTokenToCookie(request, response, refreshToken);
 
         String accessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
-        String targetUrl = getTargetUrl(accessToken);
+        String picture = (String) oAuth2User.getAttributes().get("picture");
+        String targetUrl = getTargetUrl(accessToken,picture);
 
         clearAuthenticationAttributes(request, response);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
@@ -73,10 +74,14 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         authorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
     }
 
-    private String getTargetUrl(String accessToken) {
-        return UriComponentsBuilder.fromUriString(REDIRECT_PATH)
-                .queryParam("token", accessToken)
-                .build()
-                .toUriString();
+    private String getTargetUrl(String accessToken, String picture) {
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(REDIRECT_PATH)
+                .queryParam("token", accessToken);
+
+        if (picture != null && !picture.isBlank()) {
+            builder.queryParam("picture", picture);
+        }
+
+        return builder.build().encode().toUriString();
     }
 }
