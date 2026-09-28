@@ -1,12 +1,13 @@
 spring:
   application:
     name: my-blog
-  datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
-  h2:
-    console:
-      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
   ai:
     openai:
       api-key: ${OPENAI_API_KEY}
@@ -26,3 +27,7 @@ spring:
 jwt:
   issuer: wc-blog-app
   secret_key: ${JWT_SECRET_KEY}
+aws:
+  s3:
+    bucket: wcblog-bucket
+    region: ap-northeast-2

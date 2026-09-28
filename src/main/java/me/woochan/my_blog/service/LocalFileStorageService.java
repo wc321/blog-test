@@ -2,6 +2,7 @@ package me.woochan.my_blog.service;
 
 import me.woochan.my_blog.dto.UploadResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+@Profile("local")
 @Service
 public class LocalFileStorageService implements FileStorageService {
 
