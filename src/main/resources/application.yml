@@ -26,3 +26,7 @@ spring:
 jwt:
   issuer: wc-blog-app
   secret_key: ${JWT_SECRET_KEY}
+aws:
+  s3:
+    bucket: wcblog-bucket
+    region: ap-northeast-2
