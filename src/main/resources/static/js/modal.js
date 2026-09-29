@@ -45,13 +45,18 @@ function showSuggestions(suggestions) {
     suggestions.forEach((suggestion) => {
         const div = document.createElement('div');
         div.className = 'ai-suggestion';
-        div.innerHTML = `
-                    <p>${suggestion}</p>
-                    <button class="btn btn-sm btn-outline-primary add-btn" 
-                            onclick="addToContent('${escapeHtml(suggestion)}')">
-                        클릭하여 추가
-                    </button>
-                `;
+
+        const p = document.createElement('p');
+        p.textContent = suggestion;
+
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'btn btn-sm btn-outline-primary add-btn';
+        button.textContent = '클릭하여 추가';
+        button.addEventListener('click', () => addToContent(suggestion));
+
+        div.appendChild(p);
+        div.appendChild(button);
         suggestionsDiv.appendChild(div);
     });
 
