@@ -23,6 +23,7 @@ Thumbs.db
 application-*.yml
 application-*.properties
 !application.yml
+!application-dev.yml
 
 # Log files
 *.log
